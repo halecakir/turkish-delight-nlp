@@ -1,7 +1,8 @@
-from typing import Dict
-import streamlit as st
-import spacy
 import base64
+from typing import Dict
+
+import streamlit as st
+
 from joint import runtime as joint_runtime
 
 
@@ -43,11 +44,13 @@ def get_svg(svg: str, style: str = "", wrap: bool = True):
     html = f'<img src="data:image/svg+xml;base64,{b64}" style="{style}"/>'
     return get_html(html) if wrap else html
 
+
 def get_img(img: str, style: str = "", wrap: bool = True):
     """Convert an SVG to a base64-encoded image."""
     b64 = base64.b64encode(open(img, "rb").read()).decode("utf-8")
     html = f'<img src="data:image/png;base64,{b64}" style="{style}"/>'
     return get_html(html) if wrap else html
+
 
 def get_html(html: str):
     """Convert HTML so it can be rendered."""

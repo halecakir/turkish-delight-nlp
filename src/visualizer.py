@@ -1,12 +1,11 @@
-from pickle import FALSE
-from typing import List, Sequence, Tuple, Optional, Dict, Union, Callable
-import streamlit as st
-import spacy
-from spacy.language import Language
-from spacy import displacy
-import pandas as pd
+from typing import Dict, List, Optional, Sequence, Tuple, Union
 
-from util import load_model, process_text, get_svg, get_html, LOGO
+import pandas as pd
+import spacy
+import streamlit as st
+from spacy import displacy
+
+from util import LOGO, get_html, get_svg, load_model, process_text
 
 AVAILABLE_VISUALIZERS = {"parser", "morpheme_segmentation", "morpheme_tagging"}
 # fmt: off
@@ -24,7 +23,6 @@ def visualize(
     default_model: Optional[str] = None,
     ner_labels: Optional[List[str]] = None,
     ner_attrs: List[str] = NER_ATTRS,
-    similarity_texts: Tuple[str, str] = ("apple", "orange"),
     token_attrs: List[str] = TOKEN_ATTRS,
     show_json_doc: bool = True,
     show_meta: bool = True,
