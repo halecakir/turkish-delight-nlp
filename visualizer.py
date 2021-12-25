@@ -49,8 +49,6 @@ def visualize(
 
     if show_logo:
         st.sidebar.markdown(LOGO, unsafe_allow_html=True)
-    if sidebar_title:
-        st.sidebar.title(sidebar_title)
     if sidebar_description:
         st.sidebar.markdown(sidebar_description)
 
