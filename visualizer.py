@@ -106,6 +106,14 @@ def visualize(
             doc.morph_tag, title="Morpheme Tagging", colorized_col="morpheme_tags"
         )
 
+    hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 
 def visualize_parser(
     doc,
