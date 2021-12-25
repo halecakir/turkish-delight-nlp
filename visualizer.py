@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 from spacy import displacy
 
-from util import LOGO, get_html, get_svg, load_model, process_text
+from util import LOGO, get_svg, load_model, process_text
 
 AVAILABLE_VISUALIZERS = {"parser", "morpheme_segmentation", "morpheme_tagging"}
 # fmt: off

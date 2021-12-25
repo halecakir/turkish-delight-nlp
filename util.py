@@ -3,7 +3,7 @@ from typing import Dict
 
 import streamlit as st
 
-from joint import runtime as joint_runtime
+from models.joint import runtime as joint_runtime
 
 
 @st.cache(allow_output_mutation=True, suppress_st_warning=True)
@@ -25,7 +25,7 @@ class Doc:
         self.morph = None
         self.morph_tag = None
 
-
+# TODO: enable caching
 # @st.cache(allow_output_mutation=True, suppress_st_warning=True)
 def process_text(model_name: str, model_info: Dict, text: str):
     """Process a text and create a Doc object."""
