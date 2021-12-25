@@ -1,3 +1,4 @@
+from pickle import FALSE
 from typing import List, Sequence, Tuple, Optional, Dict, Union, Callable
 import streamlit as st
 import spacy
@@ -29,10 +30,10 @@ def visualize(
     show_meta: bool = True,
     show_config: bool = True,
     show_visualizer_select: bool = False,
-    show_model_info: bool = True,
+    show_model_info: bool = False,
     sidebar_title: Optional[str] = None,
     sidebar_description: Optional[str] = None,
-    show_logo: bool = False,
+    show_logo: bool = True,
     color: Optional[str] = "#b2dfdb",
     key: Optional[str] = None,
 ) -> None:
