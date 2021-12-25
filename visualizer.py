@@ -35,6 +35,11 @@ def visualize(
     key: Optional[str] = None,
 ) -> None:
     """Embed the full visualizer with selected components."""
+    st.set_page_config(
+        page_title=sidebar_title,
+        page_icon=":maple_leaf:",
+        initial_sidebar_state="expanded"
+    )
 
     if st.config.get_option("theme.primaryColor") != color:
         st.config.set_option("theme.primaryColor", color)
