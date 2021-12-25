@@ -1,0 +1,9 @@
+{
+  "JointModel": {
+    "model_path": "models/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel",
+    "model_opts_path" : "models/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel.params",
+    "description": "descriptions",
+    "code" : "github page",
+    "visualizers" : ["parser", "morpheme_segmentation", "morpheme_tagging"]
+    }
+}
