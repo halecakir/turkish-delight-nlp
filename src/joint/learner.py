@@ -8,9 +8,9 @@ dynet_config.set(mem=400, random_seed=123456789)
 
 import dynet
 
-from utils import *
-from decoder import *
-from mnnl import (
+from .utils import *
+from .decoder import *
+from .mnnl import (
     FFSequencePredictor,
     Layer,
     RNNSequencePredictor,

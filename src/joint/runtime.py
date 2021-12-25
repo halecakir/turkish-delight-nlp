@@ -1,6 +1,6 @@
 import pickle
 
-from learner import jPosDepLearner
+from .learner import jPosDepLearner
 
 
 def load_model(model_path, model_opt_path):

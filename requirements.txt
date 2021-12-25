@@ -1,3 +1,0 @@
-streamlit
-dyNET==2.1.2
-gensim==3.8.3
