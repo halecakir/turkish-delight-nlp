@@ -18,7 +18,6 @@ from .mnnl import (
 
 import time, random
 import numpy as np
-from operator import itemgetter
 
 np.random.seed(1)
 
@@ -637,6 +636,7 @@ class jPosDepLearner:
         self.model.populate(filename)
 
     def predict_sentence(self, raw_sentence):
+        dynet.renew_cg()
         conll_sentence = convert_raw_to_conll(
             raw_sentence, self.c2i, self.m2i, self.t2i, self.morph_dict
         )
@@ -974,6 +974,7 @@ class jPosDepLearner:
             return conll_sentence
 
     def predict_morphemes(self, raw_sentence):
+        dynet.renew_cg()
         conll_sentence = convert_raw_to_conll(
             raw_sentence, self.c2i, self.m2i, self.t2i, self.morph_dict
         )
@@ -1044,10 +1045,11 @@ class jPosDepLearner:
                 else:
                     morph_seg.append([entry.norm])
                     entry.pred_seg = entry.idMorphs
-
+        dynet.renew_cg()
         return tokens, morph_seg
 
     def predict_morpheme_tags(self, raw_sentence):
+        dynet.renew_cg()
         conll_sentence = convert_raw_to_conll(
             raw_sentence, self.c2i, self.m2i, self.t2i, self.morph_dict
         )
@@ -1193,6 +1195,7 @@ class jPosDepLearner:
                         self.i2t[m_tag_id] for m_tag_id in entry.pred_tags
                     ]
                     morph_tags_return.append(entry.pred_tags_tokens)
+        dynet.renew_cg()
         return tokens, morph_tags_return
 
     def Predict(self, conll_path):

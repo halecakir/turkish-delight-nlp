@@ -5,5 +5,18 @@
     "description": "descriptions",
     "code" : "github page",
     "visualizers" : ["parser", "morpheme_segmentation", "morpheme_tagging"]
+    },
+  "Stemmer": {
+    "model_path": "data/saved-model-stemmer",
+    "description": "descriptions",
+    "code" : "github page",
+    "visualizers" : ["stemming"]
+    },
+  "NER": {
+    "model_path": "data/model.weights/",
+    "model_opts_path": "data/ner-data",
+    "description": "descriptions",
+    "code" : "github page",
+    "visualizers" : ["ner"]
     }
 }

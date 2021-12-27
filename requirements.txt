@@ -3,3 +3,4 @@ dyNET==2.1.2
 spacy==3.2.1
 gensim==3.8.3
 srsly==2.4.2
+tensorflow==1.13.1

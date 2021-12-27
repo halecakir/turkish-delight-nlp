@@ -1,12 +1,18 @@
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, Sequence
 
 import pandas as pd
 import streamlit as st
 from spacy import displacy
 
-from util import LOGO, get_svg, load_model, process_text
+from util import LOGO, get_svg, process_text, get_html
 
-AVAILABLE_VISUALIZERS = {"parser", "morpheme_segmentation", "morpheme_tagging"}
+AVAILABLE_VISUALIZERS = {
+    "parser",
+    "morpheme_segmentation",
+    "morpheme_tagging",
+    "stemming",
+    "ner",
+}
 # fmt: off
 NER_ATTRS = ["text", "label_", "start", "end", "start_char", "end_char"]
 TOKEN_ATTRS = ["idx", "text", "lemma_", "pos_", "tag_", "dep_", "head", "morph",
@@ -38,7 +44,7 @@ def visualize(
     st.set_page_config(
         page_title=sidebar_title,
         page_icon=":maple_leaf:",
-        initial_sidebar_state="expanded"
+        initial_sidebar_state="expanded",
     )
 
     if st.config.get_option("theme.primaryColor") != color:
@@ -72,7 +78,7 @@ def visualize(
         format_func=format_func,
     )
     model_load_state = st.info(f"Loading model '{selected_model}'...")
-    load_model(selected_model, models[selected_model])
+    # load_model(selected_model, models[selected_model])
     model_load_state.empty()
 
     if show_model_info:
@@ -108,7 +114,10 @@ def visualize(
         visualize_df(
             doc.morph_tag, title="Morpheme Tagging", colorized_col="morpheme_tags"
         )
-
+    if "stemming" in AVAILABLE_VISUALIZERS and "stemming" in active_visualizers:
+        visualize_df(doc.stemmed, title="Stemming", colorized_col="stems")
+    if "ner" in AVAILABLE_VISUALIZERS and "ner" in active_visualizers:
+        visualize_ner(doc.ner)
     hide_streamlit_style = """
             <style>
             #MainMenu {visibility: hidden;}
@@ -135,6 +144,26 @@ def visualize_parser(
     html = displacy.render(doc, options=options, style="dep", manual=True)
     html = html.replace("\n\n", "\n")
     st.write(get_svg(html), unsafe_allow_html=True)
+
+
+def visualize_ner(
+    doc,
+    *,
+    title: Optional[str] = "Named Entities",
+    manual: Optional[bool] = True,
+) -> None:
+    """Visualizer for named entities."""
+    if title:
+        st.header(title)
+
+    html = displacy.render(
+        doc,
+        style="ent",
+        # options={"ents": label_select, "colors": colors},
+        manual=manual,
+    )
+    style = "<style>mark.entity { display: inline-block }</style>"
+    st.write(f"{style}{get_html(html)}", unsafe_allow_html=True)
 
 
 def visualize_df(

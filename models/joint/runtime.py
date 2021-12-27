@@ -10,7 +10,7 @@ def load_model(model_path, model_opt_path):
         )
         stored_opt.external_embedding = None
 
-    print("Loading pre-trained model")
+    print("Loading pre-trained parser model")
     parser = jPosDepLearner(
         words, pos, rels, w2i, c2i, m2i, t2i, morph_dict, stored_opt
     )
