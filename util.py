@@ -12,7 +12,7 @@ from models.ner import runtime as ner_runtime
 def load_model(model_name: str, model_info: Dict):
     """Load a model."""
     model = None
-    if model_name == "JointModel":
+    if model_name in {"JointModel-All", "JointModel-DependencyParsing", "JointModel-MorphemeTagging", "JointModel-MorphemeSegmentation"}:
         model = joint_runtime.load_model(
             model_info["model_path"], model_info["model_opts_path"]
         )
@@ -35,15 +35,21 @@ class Doc:
 
 
 # TODO: enable caching
-# @st.cache(allow_output_mutation=True, suppress_st_warning=True)
+@st.cache(allow_output_mutation=True, suppress_st_warning=True)
 def process_text(model_name: str, model_info: Dict, text: str):
     """Process a text and create a Doc object."""
     model = load_model(model_name, model_info)
     doc = Doc()
-    if model_name == "JointModel":
+    if model_name == "JointModel-All":
         doc.dep = joint_runtime.predict_dependecy(model, text)
         doc.morph = joint_runtime.predict_morphemes(model, text)
         doc.morph_tag = joint_runtime.predict_morpheme_tags(model, text)
+    elif model_name == "JointModel-DependencyParsing":
+        doc.dep = joint_runtime.predict_dependecy(model, text)
+    elif model_name == "JointModel-MorphemeTagging":
+        doc.morph_tag = joint_runtime.predict_morpheme_tags(model, text)
+    elif model_name == "JointModel-MorphemeSegmentation":
+        doc.morph = joint_runtime.predict_morphemes(model, text)
     elif model_name == "Stemmer":
         doc.stemmed = stemmer_runtime.predict_stems(model, text)
     elif model_name == "NER":

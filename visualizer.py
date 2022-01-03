@@ -32,7 +32,6 @@ def visualize(
     show_json_doc: bool = True,
     show_meta: bool = True,
     show_config: bool = True,
-    show_visualizer_select: bool = False,
     show_model_info: bool = False,
     sidebar_title: Optional[str] = None,
     sidebar_description: Optional[str] = None,
@@ -74,13 +73,12 @@ def visualize(
         "Model",
         model_names,
         index=default_model_index,
-        key=f"{key}_visualize_models",
         format_func=format_func,
     )
     model_load_state = st.info(f"Loading model '{selected_model}'...")
     # load_model(selected_model, models[selected_model])
     model_load_state.empty()
-
+    print("selected_model", selected_model)
     if show_model_info:
         st.sidebar.subheader("Model info")
         # TODO burayi duzenle
@@ -90,33 +88,25 @@ def visualize(
                 {models[selected_model]["description"]}</p>"""
         st.sidebar.markdown(desc, unsafe_allow_html=True)
 
-    if show_visualizer_select:
-        active_visualizers = st.sidebar.multiselect(
-            "Visualizers",
-            options=models[selected_model]["visualizers"],
-            default=list(models[selected_model]["visualizers"]),
-            key=f"{key}_viz_select",
-        )
-
-    text = st.text_area("Text to analyze", default_text, key=f"{key}_visualize_text")
+    text = st.text_area("Text to analyze", default_text)
     doc = process_text(selected_model, models[selected_model], text)
-    if "parser" in AVAILABLE_VISUALIZERS and "parser" in active_visualizers:
-        visualize_parser(doc.dep, key=key)
-    if (
-        "morpheme_segmentation" in AVAILABLE_VISUALIZERS
-        and "morpheme_segmentation" in active_visualizers
-    ):
+    if selected_model == "JointModel-DependencyParsing":
+        visualize_parser(doc.dep)
+    elif selected_model == "JointModel-MorphemeSegmentation":
         visualize_df(doc.morph)
-    if (
-        "morpheme_tagging" in AVAILABLE_VISUALIZERS
-        and "morpheme_tagging" in active_visualizers
-    ):
+    elif selected_model == "JointModel-MorphemeTagging":
         visualize_df(
             doc.morph_tag, title="Morpheme Tagging", colorized_col="morpheme_tags"
         )
-    if "stemming" in AVAILABLE_VISUALIZERS and "stemming" in active_visualizers:
+    elif selected_model == "JointModel-All":
+        visualize_parser(doc.dep)
+        visualize_df(doc.morph)
+        visualize_df(
+            doc.morph_tag, title="Morpheme Tagging", colorized_col="morpheme_tags"
+        )
+    elif selected_model == "Stemmer":
         visualize_df(doc.stemmed, title="Stemming", colorized_col="stems")
-    if "ner" in AVAILABLE_VISUALIZERS and "ner" in active_visualizers:
+    elif selected_model == "NER":
         visualize_ner(doc.ner)
     hide_streamlit_style = """
             <style>
@@ -131,7 +121,6 @@ def visualize_parser(
     doc,
     *,
     title: Optional[str] = "Dependency Parse & Part-of-speech tags",
-    key: Optional[str] = None,
 ) -> None:
     """Visualizer for dependency parses."""
     if title:
@@ -139,7 +128,7 @@ def visualize_parser(
     cols = st.columns(4)
 
     options = {
-        "compact": cols[3].checkbox("Compact mode", key=f"{key}_parser_compact"),
+        "compact": cols[3].checkbox("Compact mode"),
     }
     html = displacy.render(doc, options=options, style="dep", manual=True)
     html = html.replace("\n\n", "\n")
