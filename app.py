@@ -15,5 +15,4 @@ visualize(
     default_model=DEFAULT_MODEL,
     default_text=DEFAULT_TEXT,
     sidebar_title="Turkish NLP Toolkit",
-    # sidebar_description="This is the place for desc"
 )

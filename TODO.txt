@@ -1,0 +1,11 @@
+TODOS:
+Add POS Tag selection
+Add Morpheme Tag Latex
+Add Morpheme Segment Latex
+Add POS Latex
+Add tables for each of latex
+Add description, bibtext, paper for each model
+Add contact, references page
+Add new example sentence
+Update names 'Model' -> 'Select Model'
+Ctrl Enter to Enter

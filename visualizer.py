@@ -32,17 +32,17 @@ def visualize(
     show_json_doc: bool = True,
     show_meta: bool = True,
     show_config: bool = True,
-    show_model_info: bool = False,
+    show_model_info: bool = True,
     sidebar_title: Optional[str] = None,
     sidebar_description: Optional[str] = None,
     show_logo: bool = True,
     color: Optional[str] = "#b2dfdb",
-    key: Optional[str] = None,
 ) -> None:
     """Embed the full visualizer with selected components."""
     st.set_page_config(
         page_title=sidebar_title,
         page_icon=":maple_leaf:",
+        layout="wide",
         initial_sidebar_state="expanded",
     )
 
@@ -52,10 +52,32 @@ def visualize(
         # Necessary to apply theming
         st.experimental_rerun()
 
+    st.markdown(
+        """
+    <style>
+    [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
+        width: 500px;
+    }
+    [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
+        width: 500px;
+        margin-left: -500px;
+    }
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
     if show_logo:
         st.sidebar.markdown(LOGO, unsafe_allow_html=True)
     if sidebar_description:
         st.sidebar.markdown(sidebar_description)
+
+    hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
     # Allow both dict of model name / description as well as list of names
     model_names = models
@@ -76,17 +98,35 @@ def visualize(
         format_func=format_func,
     )
     model_load_state = st.info(f"Loading model '{selected_model}'...")
-    # load_model(selected_model, models[selected_model])
     model_load_state.empty()
     print("selected_model", selected_model)
     if show_model_info:
-        st.sidebar.subheader("Model info")
         # TODO burayi duzenle
-        desc = f"""<p style="font-size: 0.85em; line-height: 1.5">
-                <strong>{selected_model}:</strong><br>
-                <code>{models[selected_model]["code"]}</code>.<br>
+        with st.sidebar.container():
+            desc = f"""<p style="font-family: 'Tinos', serif;">
                 {models[selected_model]["description"]}</p>"""
+            st.sidebar.subheader("Model info")
+            st.sidebar.markdown(desc, unsafe_allow_html=True)
+            st.sidebar.markdown("""---""")
+
+        with st.sidebar.container():
+            st.sidebar.subheader("Reference")
+            desc = f"""<p style="font-family: 'Tinos', serif;">
+                {models[selected_model]["citation"]}</p>"""
+            st.sidebar.markdown(desc, unsafe_allow_html=True)
+        with st.sidebar.expander("See BibTeX"):
+            st.text(models[selected_model]["bibtex"])
+
+        desc = f"""<a style="font-family: 'Tinos', serif;" href="{models[selected_model]["paper"]}">Check out the paper!</a>"""
         st.sidebar.markdown(desc, unsafe_allow_html=True)
+        st.sidebar.markdown("""---""")
+
+        with st.sidebar.container():
+            st.sidebar.subheader("Code")
+            desc = f"""<a style="font-family: 'Tinos', serif;" href="{models[selected_model]["code"]}">Check out Github page!</a>"""
+            st.sidebar.markdown(desc, unsafe_allow_html=True)
+            st.sidebar.markdown("""---""")
+
 
     text = st.text_area("Text to analyze", default_text)
     doc = process_text(selected_model, models[selected_model], text)
@@ -108,13 +148,6 @@ def visualize(
         visualize_df(doc.stemmed, title="Stemming", colorized_col="stems")
     elif selected_model == "NER":
         visualize_ner(doc.ner)
-    hide_streamlit_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            </style>
-            """
-    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 
 def visualize_parser(
