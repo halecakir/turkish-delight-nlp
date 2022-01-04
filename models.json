@@ -1,4 +1,5 @@
 {
+  "Select Model" : {"description" : "", "code" :"" , "paper" : "", "bibtex" : "", "citation" : ""},
   "JointModel-All": {
     "model_path": "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel",
     "model_opts_path" : "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel.params",
@@ -8,10 +9,28 @@
     "bibtex" : "@article{can2022joint,\ntitle={Joint learning of morphology and syntax with\ncross-level contextual information flow},\nauthor={Can Buglalilar, Burcu and\n\tAlecakir, Huseyin and\n\tManandhar, Suresh and\n\tBozsahin, Cem},\nyear={2022},\npublisher={Cambridge University Press}}",
     "citation" : "Can, B., Alecakir, H., Manandhar, S. and Bozsahin, C.\n(in press) Joint learning of morphology and syntax with \ncross-level contextual information flow.\nNatural Language Engineering."
     },
+  "JointModel-DependencyParsing": {
+      "model_path": "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel",
+      "model_opts_path" : "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel.params",
+      "description": "Deep learning model for morphological segmentation, morpheme tagging, part-of-speech (POS) tagging, and syntactic parsing onto dependencies, using cross-level contextual information flow for every word, from segments to dependencies, with an attention mechanism at horizontal flow.",
+      "code" : "https://github.com/halecakir/JointParser",
+      "paper" :"https://wlv.openrepository.com/handle/2436/624440",
+      "bibtex" : "@article{can2022joint,\ntitle={Joint learning of morphology\nand syntax with cross-level\ncontextual information flow},\nauthor={Can Buglalilar, Burcu and\n\tAlecakir, Huseyin and\n\tManandhar, Suresh and\n\tBozsahin, Cem},\nyear={2022},\npublisher={Cambridge University\nPress}}",
+      "citation" : "Can, B., Alecakir, H., Manandhar, S.\nand Bozsahin, C. (in press) Joint\nlearning of morphology and syntax\nwith cross-level contextual\ninformation flow.\nNatural Language Engineering."
+  },
+  "JointModel-PoSTagging": {
+      "model_path": "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel",
+      "model_opts_path" : "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel.params",
+      "description": "Deep learning model for morphological segmentation, morpheme tagging, part-of-speech (POS) tagging, and syntactic parsing onto dependencies, using cross-level contextual information flow for every word, from segments to dependencies, with an attention mechanism at horizontal flow.",
+      "code" : "https://github.com/halecakir/JointParser",
+      "paper" :"https://wlv.openrepository.com/handle/2436/624440",
+      "bibtex" : "@article{can2022joint,\ntitle={Joint learning of morphology\nand syntax with cross-level\ncontextual information flow},\nauthor={Can Buglalilar, Burcu and\n\tAlecakir, Huseyin and\n\tManandhar, Suresh and\n\tBozsahin, Cem},\nyear={2022},\npublisher={Cambridge University\nPress}}",
+      "citation" : "Can, B., Alecakir, H., Manandhar, S.\nand Bozsahin, C. (in press) Joint\nlearning of morphology and syntax\nwith cross-level contextual\ninformation flow.\nNatural Language Engineering."
+  },
   "JointModel-MorphemeTagging": {
       "model_path": "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel",
       "model_opts_path" : "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel.params",
-      "description": "descriptions",
+      "description": "Deep learning model for morphological segmentation, morpheme tagging, part-of-speech (POS) tagging, and syntactic parsing onto dependencies, using cross-level contextual information flow for every word, from segments to dependencies, with an attention mechanism at horizontal flow.",
       "code" : "https://github.com/halecakir/JointParser",
       "paper" :"https://wlv.openrepository.com/handle/2436/624440",
       "bibtex" : "@article{can2022joint,\ntitle={Joint learning of morphology\nand syntax with cross-level\ncontextual information flow},\nauthor={Can Buglalilar, Burcu and\n\tAlecakir, Huseyin and\n\tManandhar, Suresh and\n\tBozsahin, Cem},\nyear={2022},\npublisher={Cambridge University\nPress}}",
@@ -21,17 +40,7 @@
   "JointModel-MorphemeSegmentation": {
       "model_path": "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel",
       "model_opts_path" : "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel.params",
-      "description": "descriptions",
-      "code" : "https://github.com/halecakir/JointParser",
-      "paper" :"https://wlv.openrepository.com/handle/2436/624440",
-      "bibtex" : "@article{can2022joint,\ntitle={Joint learning of morphology\nand syntax with cross-level\ncontextual information flow},\nauthor={Can Buglalilar, Burcu and\n\tAlecakir, Huseyin and\n\tManandhar, Suresh and\n\tBozsahin, Cem},\nyear={2022},\npublisher={Cambridge University\nPress}}",
-      "citation" : "Can, B., Alecakir, H., Manandhar, S.\nand Bozsahin, C. (in press) Joint\nlearning of morphology and syntax\nwith cross-level contextual\ninformation flow.\nNatural Language Engineering."
-
-    },
-  "JointModel-DependencyParsing": {
-      "model_path": "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel",
-      "model_opts_path" : "data/Turkish-jointAll-MTAG_COMP=w_sum-MORPH_COMP=w_sum-POS_COMP=w_sum-COMP_ALPHA=0.1-trialmodel.params",
-      "description": "descriptions",
+      "description": "Deep learning model for morphological segmentation, morpheme tagging, part-of-speech (POS) tagging, and syntactic parsing onto dependencies, using cross-level contextual information flow for every word, from segments to dependencies, with an attention mechanism at horizontal flow.",
       "code" : "https://github.com/halecakir/JointParser",
       "paper" :"https://wlv.openrepository.com/handle/2436/624440",
       "bibtex" : "@article{can2022joint,\ntitle={Joint learning of morphology\nand syntax with cross-level\ncontextual information flow},\nauthor={Can Buglalilar, Burcu and\n\tAlecakir, Huseyin and\n\tManandhar, Suresh and\n\tBozsahin, Cem},\nyear={2022},\npublisher={Cambridge University\nPress}}",
@@ -42,13 +51,17 @@
     "model_path": "data/saved-model-stemmer",
     "description": "descriptions",
     "code" : "https://github.com/burcu-can/Stemmer/",
-    "paper" : "https://dergipark.org.tr/tr/download/article-file/775805"
+    "paper" : "https://dergipark.org.tr/tr/download/article-file/775805",
+    "bibtex" : "@article{burcu2019lstm,\ntitle={Lstm aglari ile Turkce kok bulma},\nauthor={Burcu, Can},\njournal={Bilisim Teknolojileri Dergisi},\nvolume={12},\nnumber={3},\npages={183--193},\nyear={2019}}",
+    "citation" : "Burcu Can. Stemming Turkish Words with LSTM Networks. Bilişim Teknolojileri Dergisi. July 2019, Vol.12, No:3."
     },
   "NER": {
     "model_path": "data/model.weights/",
     "model_opts_path": "data/ner-data",
     "description": "descriptions",
     "code" : "https://github.com/emrekgn/turkish-ner",
-    "paper" : "https://wlv.openrepository.com/bitstream/handle/2436/623614/Can_Transfer_Learning_For_2020.pdf?sequence=3"
+    "paper" : "https://wlv.openrepository.com/bitstream/handle/2436/623614/Can_Transfer_Learning_For_2020.pdf?sequence=3",
+    "bibtex" : "@article{akkaya2021transfer,\ntitle={Transfer learning for Turkish named entity\n recognition on noisy text},\nauthor={Akkaya, Emre Kagan and Can, Burcu},\njournal={Natural Language Engineering},\nvolume={27},\nnumber={1},\npages={35--64},\nyear={2021},\npublisher={Cambridge University Press}}",
+    "citation" : "Emre Kağan Akkaya and Burcu Can. Transfer Learning for Turkish Named Entity Recognition on Noisy Text. The Journal of Natural Language Engineering, Cambridge University Press. 2020"
     }
 }

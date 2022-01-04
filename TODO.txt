@@ -1,9 +1,9 @@
 TODOS:
-Add POS Tag selection
-Add Morpheme Tag Latex
-Add Morpheme Segment Latex
-Add POS Latex
-Add tables for each of latex
+Add POS Tag selection - DONE
+# Add Morpheme Tag Latex - CANCEL
+# Add Morpheme Segment Latex - CANCEL
+# Add POS Latex - CANCEL
+# Add tables for each of latex - CANCEL
 Add description, bibtext, paper for each model
 Add contact, references page
 Add new example sentence

@@ -50,6 +50,17 @@ def predict_morphemes(model, sentence):
     return doc
 
 
+def predict_pos(model, sentence):
+    doc = {"token": [], "pos": []}
+
+    for entry in model.predict_sentence(sentence):
+        if entry.form == "*root*":
+            continue
+        doc["token"].append(entry.form)
+        doc["pos"].append(entry.pred_pos)
+    return doc
+
+
 def predict_morpheme_tags(model, sentence):
     doc = {"token": [], "morpheme_tags": []}
 

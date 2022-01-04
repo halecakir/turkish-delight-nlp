@@ -26,12 +26,6 @@ def visualize(
     models: Union[List[str], Dict[str, Dict]],
     default_text: str = "",
     default_model: Optional[str] = None,
-    ner_labels: Optional[List[str]] = None,
-    ner_attrs: List[str] = NER_ATTRS,
-    token_attrs: List[str] = TOKEN_ATTRS,
-    show_json_doc: bool = True,
-    show_meta: bool = True,
-    show_config: bool = True,
     show_model_info: bool = True,
     sidebar_title: Optional[str] = None,
     sidebar_description: Optional[str] = None,
@@ -39,6 +33,47 @@ def visualize(
     color: Optional[str] = "#b2dfdb",
 ) -> None:
     """Embed the full visualizer with selected components."""
+
+    def draw():
+        selected_model = st.session_state.item
+
+        if selected_model != "Select Model":
+            text = st.text_area("Please enter sentence", default_text)
+            st.info(
+                "Currently, we don't support sentence segmentation, the selected model works best with a single sentence!"
+            )
+            doc = process_text(selected_model, models[selected_model], text)
+        if selected_model == "JointModel-DependencyParsing":
+            visualize_parser(doc.dep)
+        elif selected_model == "JointModel-MorphemeSegmentation":
+            visualize_df(doc.morph)
+        elif selected_model == "JointModel-MorphemeTagging":
+            visualize_df(
+                doc.morph_tag, title="Morpheme Tagging", colorized_col="morpheme_tags"
+            )
+        elif selected_model == "JointModel-PoSTagging":
+            visualize_df(doc.pos, title="PoS Tagging", colorized_col="pos")
+        elif selected_model == "JointModel-All":
+            visualize_parser(doc.dep)
+            visualize_df(doc.pos, title="PoS Tagging", colorized_col="pos")
+            visualize_df(doc.morph)
+            visualize_df(
+                doc.morph_tag, title="Morpheme Tagging", colorized_col="morpheme_tags"
+            )
+        elif selected_model == "Stemmer":
+            visualize_df(doc.stemmed, title="Stemming", colorized_col="stems")
+        elif selected_model == "NER":
+            st.warning(
+                "Warning : please note that the NER model is trained on small amount of social media text. It could be further trained on larger or formal text for better performance."
+            )
+            visualize_ner(doc.ner)
+
+    def show_contacts():
+        pass
+
+    def others():
+        pass
+
     st.set_page_config(
         page_title=sidebar_title,
         page_icon=":maple_leaf:",
@@ -94,60 +129,41 @@ def visualize(
     selected_model = st.sidebar.selectbox(
         "Model",
         model_names,
-        index=default_model_index,
-        format_func=format_func,
+        # index=default_model_index,
+        # format_func=format_func,
+        on_change=draw,
+        key="item",
     )
     model_load_state = st.info(f"Loading model '{selected_model}'...")
     model_load_state.empty()
-    print("selected_model", selected_model)
     if show_model_info:
-        # TODO burayi duzenle
         with st.sidebar.container():
             desc = f"""<p style="font-family: 'Tinos', serif;">
                 {models[selected_model]["description"]}</p>"""
             st.sidebar.subheader("Model info")
             st.sidebar.markdown(desc, unsafe_allow_html=True)
             st.sidebar.markdown("""---""")
+        if selected_model != "Select Model":
+            with st.sidebar.container():
+                st.sidebar.subheader("Reference")
+                desc = f"""<p style="font-family: 'Tinos', serif;">
+                    {models[selected_model]["citation"]}</p>"""
+                st.sidebar.markdown(desc, unsafe_allow_html=True)
+            with st.sidebar.expander("See BibTeX"):
+                st.text(models[selected_model]["bibtex"])
 
-        with st.sidebar.container():
-            st.sidebar.subheader("Reference")
-            desc = f"""<p style="font-family: 'Tinos', serif;">
-                {models[selected_model]["citation"]}</p>"""
-            st.sidebar.markdown(desc, unsafe_allow_html=True)
-        with st.sidebar.expander("See BibTeX"):
-            st.text(models[selected_model]["bibtex"])
-
-        desc = f"""<a style="font-family: 'Tinos', serif;" href="{models[selected_model]["paper"]}">Check out the paper!</a>"""
-        st.sidebar.markdown(desc, unsafe_allow_html=True)
-        st.sidebar.markdown("""---""")
-
-        with st.sidebar.container():
-            st.sidebar.subheader("Code")
-            desc = f"""<a style="font-family: 'Tinos', serif;" href="{models[selected_model]["code"]}">Check out Github page!</a>"""
+            desc = f"""<a style="font-family: 'Tinos', serif;" href="{models[selected_model]["paper"]}">The paper is available here.</a>"""
             st.sidebar.markdown(desc, unsafe_allow_html=True)
             st.sidebar.markdown("""---""")
 
+            with st.sidebar.container():
+                st.sidebar.subheader("Code")
+                desc = f"""<a style="font-family: 'Tinos', serif;" href="{models[selected_model]["code"]}">Check out Github page</a>"""
+                st.sidebar.markdown(desc, unsafe_allow_html=True)
+                st.sidebar.markdown("""---""")
 
-    text = st.text_area("Text to analyze", default_text)
-    doc = process_text(selected_model, models[selected_model], text)
-    if selected_model == "JointModel-DependencyParsing":
-        visualize_parser(doc.dep)
-    elif selected_model == "JointModel-MorphemeSegmentation":
-        visualize_df(doc.morph)
-    elif selected_model == "JointModel-MorphemeTagging":
-        visualize_df(
-            doc.morph_tag, title="Morpheme Tagging", colorized_col="morpheme_tags"
-        )
-    elif selected_model == "JointModel-All":
-        visualize_parser(doc.dep)
-        visualize_df(doc.morph)
-        visualize_df(
-            doc.morph_tag, title="Morpheme Tagging", colorized_col="morpheme_tags"
-        )
-    elif selected_model == "Stemmer":
-        visualize_df(doc.stemmed, title="Stemming", colorized_col="stems")
-    elif selected_model == "NER":
-        visualize_ner(doc.ner)
+        st.sidebar.button("Contact", on_click=show_contacts)
+        st.sidebar.button("Other Resources", on_click=others)
 
 
 def visualize_parser(

@@ -12,14 +12,22 @@ from models.ner import runtime as ner_runtime
 def load_model(model_name: str, model_info: Dict):
     """Load a model."""
     model = None
-    if model_name in {"JointModel-All", "JointModel-DependencyParsing", "JointModel-MorphemeTagging", "JointModel-MorphemeSegmentation"}:
+    if model_name in {
+        "JointModel-All",
+        "JointModel-DependencyParsing",
+        "JointModel-MorphemeTagging",
+        "JointModel-MorphemeSegmentation",
+        "JointModel-PoSTagging",
+    }:
         model = joint_runtime.load_model(
             model_info["model_path"], model_info["model_opts_path"]
         )
     elif model_name == "Stemmer":
         model = stemmer_runtime.load_model(model_info["model_path"])
     elif model_name == "NER":
-        model = ner_runtime.load_model(model_info["model_path"], model_info["model_opts_path"])
+        model = ner_runtime.load_model(
+            model_info["model_path"], model_info["model_opts_path"]
+        )
     else:
         raise ValueError(f"Unknown model {type}")
     return model
@@ -30,11 +38,11 @@ class Doc:
         self.dep = None
         self.morph = None
         self.morph_tag = None
+        self.pos = None
         self.stemmed = None
         self.ner = None
 
 
-# TODO: enable caching
 @st.cache(allow_output_mutation=True, suppress_st_warning=True)
 def process_text(model_name: str, model_info: Dict, text: str):
     """Process a text and create a Doc object."""
@@ -44,12 +52,15 @@ def process_text(model_name: str, model_info: Dict, text: str):
         doc.dep = joint_runtime.predict_dependecy(model, text)
         doc.morph = joint_runtime.predict_morphemes(model, text)
         doc.morph_tag = joint_runtime.predict_morpheme_tags(model, text)
+        doc.pos = joint_runtime.predict_pos(model, text)
     elif model_name == "JointModel-DependencyParsing":
         doc.dep = joint_runtime.predict_dependecy(model, text)
     elif model_name == "JointModel-MorphemeTagging":
         doc.morph_tag = joint_runtime.predict_morpheme_tags(model, text)
     elif model_name == "JointModel-MorphemeSegmentation":
         doc.morph = joint_runtime.predict_morphemes(model, text)
+    elif model_name == "JointModel-PoSTagging":
+        doc.pos = joint_runtime.predict_pos(model, text)
     elif model_name == "Stemmer":
         doc.stemmed = stemmer_runtime.predict_stems(model, text)
     elif model_name == "NER":
