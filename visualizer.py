@@ -176,9 +176,7 @@ def visualize_parser(
         st.header(title)
     cols = st.columns(4)
 
-    options = {
-        "compact": cols[3].checkbox("Compact mode"),
-    }
+    options = {}
     html = displacy.render(doc, options=options, style="dep", manual=True)
     html = html.replace("\n\n", "\n")
     st.write(get_svg(html), unsafe_allow_html=True)
