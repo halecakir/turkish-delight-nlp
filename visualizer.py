@@ -38,7 +38,7 @@ def visualize(
         selected_model = st.session_state.item
 
         if selected_model != "Select Model":
-            text = st.text_area("Please enter sentence", default_text)
+            text = st.text_area("Please enter sentence", models[selected_model]["deafult_sentence"], on_change=draw)
             st.info(
                 "Currently, we don't support sentence segmentation, the selected model works best with a single sentence!"
             )
@@ -76,7 +76,7 @@ def visualize(
 
     st.set_page_config(
         page_title=sidebar_title,
-        page_icon=":maple_leaf:",
+        page_icon=":koala:",
         layout="wide",
         initial_sidebar_state="expanded",
     )
