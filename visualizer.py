@@ -31,6 +31,8 @@ def visualize(
     sidebar_description: Optional[str] = None,
     show_logo: bool = True,
     color: Optional[str] = "#b2dfdb",
+    papers_md: str = "",
+    contact_md: str = ""
 ) -> None:
     """Embed the full visualizer with selected components."""
 
@@ -69,10 +71,14 @@ def visualize(
             visualize_ner(doc.ner)
 
     def show_contacts():
-        pass
+        with open(contact_md) as target:
+            content = target.read()
+            st.markdown(content)
 
     def others():
-        pass
+        with open(papers_md) as target:
+            content = target.read()
+            st.markdown(content)
 
     st.set_page_config(
         page_title=sidebar_title,
