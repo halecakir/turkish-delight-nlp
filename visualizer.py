@@ -21,6 +21,7 @@ TOKEN_ATTRS = ["idx", "text", "lemma_", "pos_", "tag_", "dep_", "head", "morph",
 # fmt: on
 FOOTER = """<span style="font-size: 0.75em">&hearts; Built with [`spacy-streamlit`](https://github.com/explosion/spacy-streamlit)</span>"""
 
+from PIL import Image
 
 def visualize(
     models: Union[List[str], Dict[str, Dict]],
@@ -42,7 +43,7 @@ def visualize(
         if selected_model != "Select Model":
             text = st.text_area("Please enter sentence", models[selected_model]["deafult_sentence"], on_change=draw)
             st.info(
-                "Currently, we don't support sentence segmentation, the selected model works best with a single sentence!"
+                "Note: Currently, we don't support sentence segmentation, the selected model works best with a single sentence!"
             )
             doc = process_text(selected_model, models[selected_model], text)
         if selected_model == "JointModel-DependencyParsing":
@@ -69,6 +70,10 @@ def visualize(
                 "Warning : please note that the NER model is trained on small amount of social media text. It could be further trained on larger or formal text for better performance."
             )
             visualize_ner(doc.ner)
+        elif selected_model == "SemanticParser":
+            image = Image.open(doc.ucca)
+            st.image(image, caption='Semantic Parser Result')
+
 
     def show_contacts():
         with open(contact_md) as target:

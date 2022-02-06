@@ -2,13 +2,21 @@ import base64
 from typing import Dict
 
 import streamlit as st
+import torch
 
 from models.joint import runtime as joint_runtime
-from models.stemmer import runtime as stemmer_runtime
 from models.ner import runtime as ner_runtime
+from models.stemmer import runtime as stemmer_runtime
+from web import test
 
-
-@st.cache(allow_output_mutation=True, suppress_st_warning=True)
+@st.cache(
+    allow_output_mutation=True,
+    suppress_st_warning=True,
+    hash_funcs={
+        torch.nn.parameter.Parameter: lambda _: None,
+        torch.Tensor: lambda _: None,
+    },
+)
 def load_model(model_name: str, model_info: Dict):
     """Load a model."""
     model = None
@@ -28,6 +36,9 @@ def load_model(model_name: str, model_info: Dict):
         model = ner_runtime.load_model(
             model_info["model_path"], model_info["model_opts_path"]
         )
+    elif model_name == "SemanticParser":
+        pass
+        #        model = sem_runtime.load_model(model_info["model_path"])
     else:
         raise ValueError(f"Unknown model {type}")
     return model
@@ -41,9 +52,17 @@ class Doc:
         self.pos = None
         self.stemmed = None
         self.ner = None
+        self.ucca = None
 
 
-@st.cache(allow_output_mutation=True, suppress_st_warning=True)
+# @st.cache(
+#     allow_output_mutation=True,
+#     suppress_st_warning=True,
+#     hash_funcs={
+#         torch.nn.parameter.Parameter: lambda _: None,
+#         torch.Tensor: lambda _: None,
+#     },
+# )
 def process_text(model_name: str, model_info: Dict, text: str):
     """Process a text and create a Doc object."""
     model = load_model(model_name, model_info)
@@ -65,6 +84,8 @@ def process_text(model_name: str, model_info: Dict, text: str):
         doc.stemmed = stemmer_runtime.predict_stems(model, text)
     elif model_name == "NER":
         doc.ner = ner_runtime.predict_ner(model, text)
+    elif model_name == "SemanticParser":
+        doc.ucca = test(text)
     else:
         raise ValueError(f"Unknown model {type}")
     return doc

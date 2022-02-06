@@ -51,6 +51,15 @@
       "citation" : "Can, B., Alecakir, H., Manandhar, S.\nand Bozsahin, C. (in press) Joint\nlearning of morphology and syntax\nwith cross-level contextual\ninformation flow.\nNatural Language Engineering.",
       "deafult_sentence" : "O iyi insanlar o güzel atlara binip çekip gittiler"
     },
+  "SemanticParser": {
+      "model_path": "data/semantic_parser",
+      "description": "The semantic parser is an ncoder/decoder model that solves the task as chart-based constituency parsing. Self-attention layers are used as the encoder with an MLP classifier with two fully-connected layers with ReLU activation function, and the CYK algorithm is used in the decoder that generates the tree with the maximum score using the scores obtained from the encoder. The model is trained on a merged English, German and French UCCA dataset. The features (PoS tag, dependency label) are extracted by Stana library and used in the input layer of the model.",
+      "code" : "https://github.com/necvabolucu/ucca-parser",
+      "paper" :"https://arxiv.org/abs/2110.00621",
+      "bibtex" : "@article{bolucu2021self,title={Self-Attentive Constituency Parsing for UCCA-based Semantic Parsing},author={B{\"o}l{\"u}c{\"u}, Necva and Can, Burcu},journal={arXiv preprint arXiv:2110.00621},year={2021}}",
+      "citation" : "Bölücü, N., & Can, B. (2021). Self-Attentive Constituency Parsing for UCCA-based Semantic Parsing. arXiv preprint arXiv:2110.00621.",
+      "deafult_sentence" : "O iyi insanlar o güzel atlara binip çekip gittiler"
+    },
   "Stemmer": {
     "model_path": "data/saved-model-stemmer",
     "description": "The stemmer is built on an LSTM network with an attention mechanism that identifies the stem based on the characters of a word. The model is trained on the word list obtained from METU-Sabanci Treebank.",
