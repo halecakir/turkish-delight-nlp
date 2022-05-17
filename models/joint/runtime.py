@@ -18,11 +18,18 @@ def load_model(model_path, model_opt_path):
     return parser
 
 
-def predict_dependecy(model, sentence):
+def predict_dependecy_file(model, sentence):
+    result = ""
     doc = {"words": [], "arcs": []}
     for entry in model.predict_sentence(sentence):
         if entry.form == "*root*":
             continue
+        entry.pred_pos = None
+        entry.xpos = None
+        entry.pred_tags_tokens = None
+        entry.feats = None
+        result += str(entry) + "\n"
+        
         doc["words"].append({"text": entry.form, "tag": entry.pred_pos})
         if entry.pred_relation == "root":
             continue
@@ -35,39 +42,50 @@ def predict_dependecy(model, sentence):
         doc["arcs"].append(
             {"start": start, "end": end, "label": entry.pred_relation, "dir": dir}
         )
-    return doc
+        
+        
+    return {"doc": doc, "conllu": result, "sentence": sentence}
 
-
-def predict_morphemes(model, sentence):
-    doc = {"token": [], "morphemes": []}
-
+def predict_morphemes_file(model, sentence):
+    doc = {}
+    doc_1 = {"token": [], "morphemes": []}
     tokens, morhps = model.predict_morphemes(sentence)
-    for entry in zip(tokens, morhps):
-        if entry[0] == "*root*":
+    for entry, morph in zip(tokens, morhps):
+        if entry == "*root*":
             continue
-        doc["token"].append(entry[0])
-        doc["morphemes"].append(f"{{{', '.join(entry[1])}}}")
-    return doc
+        doc[entry] = morph
+        doc_1["token"].append(entry)
+        doc_1["morphemes"].append(f"{{{', '.join(morph)}}}")
+    return {"doc": doc_1, "sentence": sentence, "morphemes": doc}
 
-
-def predict_pos(model, sentence):
+def predict_pos_file(model, sentence):
+    result = ""
     doc = {"token": [], "pos": []}
-
     for entry in model.predict_sentence(sentence):
         if entry.form == "*root*":
             continue
+        entry.pred_parent_id = None
+        entry.pred_relation = None
+        entry.xpos = None
+        entry.pred_tags_tokens = None
+        entry.feats = None
+        result += str(entry) + "\n"
         doc["token"].append(entry.form)
         doc["pos"].append(entry.pred_pos)
-    return doc
+    return {"doc": doc, "conllu": result, "sentence": sentence}
 
 
-def predict_morpheme_tags(model, sentence):
+def predict_morpheme_tags_file(model, sentence):
+    result = ""
     doc = {"token": [], "morpheme_tags": []}
-
-    tokens, morhps = model.predict_morpheme_tags(sentence)
-    for entry in zip(tokens, morhps):
-        if entry[0] == "*root*":
+    for entry in model.predict_sentence(sentence):
+        if entry.form == "*root*":
             continue
-        doc["token"].append(entry[0])
-        doc["morpheme_tags"].append(f"{{{', '.join(entry[1][1:-1])}}}")
-    return doc
+        entry.pred_parent_id = None
+        entry.pred_relation = None
+        entry.pred_pos = None
+        entry.xpos = None
+        result += str(entry) + "\n"
+        doc["token"].append(entry.form)
+        doc["morpheme_tags"].append(f"{{{', '.join(entry.pred_tags_tokens)}}}")
+    return {"doc" : doc, "conllu": result, "sentence": sentence}

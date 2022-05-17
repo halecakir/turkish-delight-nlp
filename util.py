@@ -7,7 +7,7 @@ import torch
 from models.joint import runtime as joint_runtime
 from models.ner import runtime as ner_runtime
 from models.stemmer import runtime as stemmer_runtime
-from web import test
+from models.semantic_parser import runtime as semantic_runtime
 
 @st.cache(
     allow_output_mutation=True,
@@ -37,8 +37,7 @@ def load_model(model_name: str, model_info: Dict):
             model_info["model_path"], model_info["model_opts_path"]
         )
     elif model_name == "SemanticParser":
-        pass
-        #        model = sem_runtime.load_model(model_info["model_path"])
+        model = semantic_runtime.load_model(model_info["model_path"])
     else:
         raise ValueError(f"Unknown model {type}")
     return model
@@ -63,32 +62,47 @@ class Doc:
 #         torch.Tensor: lambda _: None,
 #     },
 # )
+
+
 def process_text(model_name: str, model_info: Dict, text: str):
     """Process a text and create a Doc object."""
     model = load_model(model_name, model_info)
     doc = Doc()
     if model_name == "JointModel-All":
-        doc.dep = joint_runtime.predict_dependecy(model, text)
-        doc.morph = joint_runtime.predict_morphemes(model, text)
-        doc.morph_tag = joint_runtime.predict_morpheme_tags(model, text)
-        doc.pos = joint_runtime.predict_pos(model, text)
+        doc.dep = joint_runtime.predict_dependecy_file(model, text)["doc"]
+        doc.morph = joint_runtime.predict_morphemes_file(model, text)["doc"]
+        doc.morph_tag = joint_runtime.predict_morpheme_tags_file(model, text)["doc"]
+        doc.pos = joint_runtime.predict_pos_file(model, text)["doc"]
+        
+        doc.dep_conll = joint_runtime.predict_dependecy_file(model, text)["conllu"]
+        doc.morph_conll = joint_runtime.predict_morphemes_file(model, text)["morphemes"]
+        doc.morph_tag_conll = joint_runtime.predict_morpheme_tags_file(model, text)["conllu"]
+        doc.pos_conll = joint_runtime.predict_pos_file(model, text)["conllu"]
     elif model_name == "JointModel-DependencyParsing":
-        doc.dep = joint_runtime.predict_dependecy(model, text)
+        doc.dep = joint_runtime.predict_dependecy_file(model, text)["doc"]
+        doc.dep_conll = joint_runtime.predict_dependecy_file(model, text)["conllu"]
     elif model_name == "JointModel-MorphemeTagging":
-        doc.morph_tag = joint_runtime.predict_morpheme_tags(model, text)
+        doc.morph_tag = joint_runtime.predict_morpheme_tags_file(model, text)["doc"]
+        doc.morph_tag_conll = joint_runtime.predict_morpheme_tags_file(model, text)["conllu"]
     elif model_name == "JointModel-MorphemeSegmentation":
-        doc.morph = joint_runtime.predict_morphemes(model, text)
+        doc.morph = joint_runtime.predict_morphemes_file(model, text)["doc"]
+        doc.morph_conll = joint_runtime.predict_morphemes_file(model, text)["morphemes"]
     elif model_name == "JointModel-PoSTagging":
-        doc.pos = joint_runtime.predict_pos(model, text)
+        doc.pos = joint_runtime.predict_pos_file(model, text)["doc"]
+        doc.pos_conll = joint_runtime.predict_pos_file(model, text)["conllu"]
     elif model_name == "Stemmer":
         doc.stemmed = stemmer_runtime.predict_stems(model, text)
+        doc.stemmed_conll = stemmer_runtime.predict_stems(model, text)
     elif model_name == "NER":
         doc.ner = ner_runtime.predict_ner(model, text)
+        doc.ner_conll = ner_runtime.predict_ner(model, text)
     elif model_name == "SemanticParser":
-        doc.ucca = test(text)
+        doc.ucca = semantic_runtime.predict_semantic(model, text)[0]
+        doc.ucca_conll = semantic_runtime.predict_semantic(model, text)[1]
     else:
         raise ValueError(f"Unknown model {type}")
     return doc
+
 
 
 def get_svg(svg: str, style: str = "", wrap: bool = True):

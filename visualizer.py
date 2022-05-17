@@ -1,5 +1,5 @@
 from typing import Dict, List, Optional, Union, Sequence
-
+from io import StringIO 
 import pandas as pd
 import streamlit as st
 from spacy import displacy
@@ -39,7 +39,6 @@ def visualize(
 
     def draw():
         selected_model = st.session_state.item
-
         if selected_model != "Select Model":
             text = st.text_area("Please enter sentence", models[selected_model]["deafult_sentence"], on_change=draw)
             st.info(
@@ -84,6 +83,8 @@ def visualize(
         with open(papers_md) as target:
             content = target.read()
             st.markdown(content)
+			
+			
 
     st.set_page_config(
         page_title=sidebar_title,
@@ -175,7 +176,37 @@ def visualize(
 
         st.sidebar.button("Contact", on_click=show_contacts)
         st.sidebar.button("Other Resources", on_click=others)
+        docx_file = st.sidebar.file_uploader("Upload a Text File", type=["txt"])
+        if docx_file is not None:
+            results = analyse(docx_file, selected_model, models[selected_model])
+            st.sidebar.download_button(label="Analyse", data=results, file_name=docx_file.name.strip(".txt") + "_" + selected_model+ '_processed.txt')
 
+def analyse(file, selected_model, model):
+    result = ""
+    stringio = StringIO(file.getvalue().decode("utf-8"))
+    for line in stringio.read().splitlines():
+        doc = process_text(selected_model, model, line.strip("\n"))
+    
+        if selected_model == "JointModel-DependencyParsing":
+            result += doc.dep_conll + "\n\n"
+        elif selected_model == "JointModel-MorphemeSegmentation":
+            result += doc.morph_conll + "\n\n"
+        elif selected_model == "JointModel-MorphemeTagging":
+            result += doc.morph_tag_conll + "\n\n"
+        elif selected_model == "JointModel-PoSTagging":
+            result += doc.pos_conll + "\n\n"
+        elif selected_model == "JointModel-All":
+            result += doc.dep_conll + "\n\n"
+        elif selected_model == "Stemmer":
+            result += doc.stemmed + "\n\n"
+        elif selected_model == "NER":
+            result += doc.ner + "\n\n"
+        elif selected_model == "SemanticParser":
+            image = Image.open(doc.ucca)
+            st.image(image, caption='Semantic Parser Result')
+    return result
+    
+            
 
 def visualize_parser(
     doc,
@@ -190,7 +221,7 @@ def visualize_parser(
     options = {}
     html = displacy.render(doc, options=options, style="dep", manual=True)
     html = html.replace("\n\n", "\n")
-    st.write(get_svg(html), unsafe_allow_html=True)
+    st.write(get_svg(html, "max-width: 100%;"), unsafe_allow_html=True)
 
 
 def visualize_ner(

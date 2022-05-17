@@ -81,3 +81,13 @@
   Ahmet Üstün, Burcu Can. Unsupervised Morphological Segmentation Using Neural Word Embeddings. 4th International Conference on Statistical Language and Speech Processing (SLSP 2016), Pilsen, Czech Republic, 2016.
 
   [The paper is available here.](https://wlv.openrepository.com/bitstream/handle/2436/623711/Unsupervised_Morphological_Segmentation_Using_Neural_Word_Embeddings.pdf?sequence=3&isAllowed=y)
+  
+ * Semantic Parser
+ 
+ Necva Bölücü, Burcu Can. 
+ 
+ Self-Attentive Constituency Parsing for UCCA-based Semantic Parsing. arXiv preprint arXiv:2110.00621, 2021.
+ 
+ [The paper is available here.](https://arxiv.org/abs/2110.00621)
+
+ 

@@ -52,7 +52,7 @@
       "deafult_sentence" : "O iyi insanlar o güzel atlara binip çekip gittiler"
     },
   "SemanticParser": {
-      "model_path": "data/semantic_parser",
+      "model_path": "data/semantic_parser/",
       "description": "The semantic parser is an ncoder/decoder model that solves the task as chart-based constituency parsing. Self-attention layers are used as the encoder with an MLP classifier with two fully-connected layers with ReLU activation function, and the CYK algorithm is used in the decoder that generates the tree with the maximum score using the scores obtained from the encoder. The model is trained on a merged English, German and French UCCA dataset. The features (PoS tag, dependency label) are extracted by Stana library and used in the input layer of the model.",
       "code" : "https://github.com/necvabolucu/ucca-parser",
       "paper" :"https://arxiv.org/abs/2110.00621",
@@ -71,7 +71,7 @@
     },
   "NER": {
     "model_path": "data/model.weights/",
-    "model_opts_path": "data/ner-data",
+    "model_opts_path": "data/ner-data/",
     "description": "The Named Entity Recognition model is based on BiLSTM-CRF architecture, where different levels of neural embeddings are incorporated. Those embeddings include word embeddings, character embeddings, morpheme embeddings, and orthographic embeddings. There are two versions of the same architecture available. First one is only trained on noisy text, whereas the second model is trained with transfer learning that is jointly trained on both formal and noisy text with shared BiLSTM layers but separate CRF layers.",
     "code" : "https://github.com/emrekgn/turkish-ner",
     "paper" : "https://wlv.openrepository.com/bitstream/handle/2436/623614/Can_Transfer_Learning_For_2020.pdf?sequence=3",

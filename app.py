@@ -15,7 +15,7 @@ visualize(
     MODELS,
     default_model=DEFAULT_MODEL,
     default_text=DEFAULT_TEXT,
-    sidebar_title="Turkish NLP Toolkit",
+    sidebar_title="Turkish Delight NLP",
     papers_md=PAPERS_MD,
     contact_md=CONTACT_MD
 )
