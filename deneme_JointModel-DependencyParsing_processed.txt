@@ -1,0 +1,26 @@
+# Ama hiçbir þey söylemedim ki ben sizlere .
+1	ama	_	_	_	_	0	root	_	_
+2	hiçbir	_	_	_	_	4	obj	_	_
+3	þey	_	_	_	_	2	compound	_	_
+4	söylemedim	_	_	_	_	7	nsubj	_	_
+5	ki	_	_	_	_	4	advmod:emph	_	_
+6	ben	_	_	_	_	7	nsubj	_	_
+7	sizlere	_	_	_	_	1	conj	_	_
+8	.	_	_	_	_	7	punct	_	_
+
+# Ne ondan bahsedebildim , ne yaþadýklarýmdan ...
+1	ne	_	_	_	_	3	obl	_	_
+2	ondan	_	_	_	_	3	obl	_	_
+3	bahsedebildim	_	_	_	_	0	root	_	_
+4	,	_	_	_	_	6	punct	_	_
+5	ne	_	_	_	_	6	obj	_	_
+6	yaþadýklarýmdan	_	_	_	_	3	conj	_	_
+7	...	_	_	_	_	6	punct	_	_
+
+# Onlar önemli deðil ki .
+1	onlar	_	_	_	_	2	nsubj	_	_
+2	önemli	_	_	_	_	0	root	_	_
+3	deðil	_	_	_	_	2	cop	_	_
+4	ki	_	_	_	_	2	advmod:emph	_	_
+5	.	_	_	_	_	2	punct	_	_
+

@@ -12,12 +12,13 @@ def load_model(model_path, model_opts_path):
 
 def predict_ner(model, sentence):
     doc = {"text": sentence, "ents": [], "title": None}
-
+    result = ""
     tokens = sentence.split()
     preds = model.predict_ner(tokens)
     start = 0
     for t, p in zip(tokens, preds):
         if p != "O":
             doc["ents"].append({"start": start, "end": start + len(t), "label": p})
+            result += str(doc["ents"]) + "\n"
         start += len(t) + 1
-    return doc
+    return {"doc": doc, "conllu": result, "sentence": sentence}

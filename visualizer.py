@@ -199,19 +199,19 @@ def analyse(file, selected_model, model):
             doc = process_text(selected_model, model, line.strip("\n"))
         
             if selected_model == "JointModel-DependencyParsing":
-                result += doc.dep_conll + "\n"
+                result += "# " + line + "\n" + doc.dep_conll + "\n"
             elif selected_model == "JointModel-MorphemeSegmentation":
-                result += doc.morph_conll + "\n"
+                result += "# " + line + "\n" + doc.morph_conll + "\n"
             elif selected_model == "JointModel-MorphemeTagging":
-                result += doc.morph_tag_conll + "\n"
+                result += "# " + line + "\n" + doc.morph_tag_conll + "\n"
             elif selected_model == "JointModel-PoSTagging":
-                result += doc.pos_conll + "\n"
+                result += "# " + line + "\n" + doc.pos_conll + "\n"
             elif selected_model == "JointModel-All":
-                result += doc.joint_conll + "\n"
+                result += "# " + line + "\n" + doc.joint_conll + "\n"
             elif selected_model == "Stemmer":
-                result += doc.stem_conll + "\n"
+                result += "# " + line + "\n" + doc.stem_conll + "\n"
             elif selected_model == "NER":
-                result += doc.ner + "\n"
+                result += "# " + line + "\n" + doc.ner + "\n"
             elif selected_model == "SemanticParser":   
                 os.makedirs(file.name.strip(".txt"), exist_ok=True)
                 file_write = open(os.path.join(file.name.strip(".txt"),str(count)+".xml"),"w") 

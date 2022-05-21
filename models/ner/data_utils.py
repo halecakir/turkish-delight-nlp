@@ -63,7 +63,7 @@ class CoNLLDataset(object):
 
     def __iter__(self):
         niter = 0
-        with open(self.filename) as f:
+        with open(self.filename, encoding="utf8") as f:
             words, tags = [], []
             for line in f:
                 line = line.strip()
@@ -144,7 +144,7 @@ def get_word_vec_vocab(filename):
     """
     print("Building vocab...")
     vocab = set()
-    with open(filename) as f:
+    with open(filename, encoding="utf8") as f:
         for line in f:
             word = line.strip().split(" ")[0]
             vocab.add(word)
@@ -166,7 +166,7 @@ def write_vocab(vocab, filename):
 
     """
     print("Writing vocab...")
-    with open(filename, "w") as f:
+    with open(filename, "w", encoding="utf8") as f:
         for i, word in enumerate(vocab):
             if i != len(vocab) - 1:
                 f.write("{}\n".format(word))
@@ -187,7 +187,7 @@ def load_vocab(filename):
     """
     try:
         d = dict()
-        with open(filename) as f:
+        with open(filename, encoding="utf8") as f:
             for idx, word in enumerate(f):
                 word = word.strip()
                 d[word] = idx
@@ -213,7 +213,7 @@ def export_trimmed_word_vectors(
     embeddings = np.zeros([len(vocab), dim])
     numb_of_words = 0
     numb_of_words_in_vocab = 0
-    with open(vec_filename) as f:
+    with open(vec_filename, encoding="utf8") as f:
         for line in f:
             numb_of_words += 1
             line = line.strip().split(" ")
@@ -501,7 +501,7 @@ def write_result(content, filename):
 
     """
     print("Writing result...")
-    with open(filename, "a+") as f:
+    with open(filename, "a+", encoding="utf8") as f:
         f.write(content)
         if content != "\n":
             f.write("\n")

@@ -91,7 +91,8 @@ def process_text(model_name: str, model_info: Dict, text: str):
         doc.stemmed = stemmer_runtime.predict_stems(model, text)["doc"]
         doc.stem_conll = stemmer_runtime.predict_stems(model, text)["conllu"]
     elif model_name == "NER":
-        doc.ner = ner_runtime.predict_ner(model, text)
+        doc.ner = ner_runtime.predict_ner(model, text)["doc"]
+        doc.ner_conll = ner_runtime.predict_ner(model, text)["conllu"]
     elif model_name == "SemanticParser":
         doc.ucca, doc.ucca_conll = semantic_runtime.predict_semantic(model, text)
     else:
