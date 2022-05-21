@@ -1,11 +1,15 @@
 from typing import Dict, List, Optional, Union, Sequence
 from io import StringIO 
 import pandas as pd
+import streamlit.report_thread as ReportThread
+from threading import Thread
+import streamlit.components.v1 as components
 import streamlit as st
 from spacy import displacy
-
+import os
+import time
 from util import LOGO, get_svg, process_text, get_html
-
+ctx = ReportThread.get_report_ctx()
 AVAILABLE_VISUALIZERS = {
     "parser",
     "morpheme_segmentation",
@@ -22,6 +26,7 @@ TOKEN_ATTRS = ["idx", "text", "lemma_", "pos_", "tag_", "dep_", "head", "morph",
 FOOTER = """<span style="font-size: 0.75em">&hearts; Built with [`spacy-streamlit`](https://github.com/explosion/spacy-streamlit)</span>"""
 
 from PIL import Image
+
 
 def visualize(
     models: Union[List[str], Dict[str, Dict]],
@@ -177,36 +182,44 @@ def visualize(
         st.sidebar.button("Contact", on_click=show_contacts)
         st.sidebar.button("Other Resources", on_click=others)
         docx_file = st.sidebar.file_uploader("Upload a Text File", type=["txt"])
-        if docx_file is not None:
-            results = analyse(docx_file, selected_model, models[selected_model])
-            st.sidebar.download_button(label="Analyse", data=results, file_name=docx_file.name.strip(".txt") + "_" + selected_model+ '_processed.txt')
+        thread = Thread(target=analyse, args=(docx_file, selected_model, models[selected_model]))
+        thread = ReportThread.add_report_ctx(thread)
+        thread.start()
+        thread.join()
+
 
 def analyse(file, selected_model, model):
-    result = ""
-    stringio = StringIO(file.getvalue().decode("utf-8"))
-    for line in stringio.read().splitlines():
-        doc = process_text(selected_model, model, line.strip("\n"))
-    
-        if selected_model == "JointModel-DependencyParsing":
-            result += doc.dep_conll + "\n\n"
-        elif selected_model == "JointModel-MorphemeSegmentation":
-            result += doc.morph_conll + "\n\n"
-        elif selected_model == "JointModel-MorphemeTagging":
-            result += doc.morph_tag_conll + "\n\n"
-        elif selected_model == "JointModel-PoSTagging":
-            result += doc.pos_conll + "\n\n"
-        elif selected_model == "JointModel-All":
-            result += doc.dep_conll + "\n\n"
-        elif selected_model == "Stemmer":
-            result += doc.stemmed + "\n\n"
-        elif selected_model == "NER":
-            result += doc.ner + "\n\n"
-        elif selected_model == "SemanticParser":
-            image = Image.open(doc.ucca)
-            st.image(image, caption='Semantic Parser Result')
-    return result
-    
-            
+    if file is not None:
+        file_name=file.name.strip(".txt") + "_" + selected_model+ '_processed.txt'
+        file_write = open(file_name,"w") 
+        result = ""
+        count = 1
+        stringio = StringIO(file.getvalue().decode("utf-8"))
+        for line in stringio.read().splitlines():
+            doc = process_text(selected_model, model, line.strip("\n"))
+        
+            if selected_model == "JointModel-DependencyParsing":
+                result += doc.dep_conll + "\n"
+            elif selected_model == "JointModel-MorphemeSegmentation":
+                result += doc.morph_conll + "\n"
+            elif selected_model == "JointModel-MorphemeTagging":
+                result += doc.morph_tag_conll + "\n"
+            elif selected_model == "JointModel-PoSTagging":
+                result += doc.pos_conll + "\n"
+            elif selected_model == "JointModel-All":
+                result += doc.joint_conll + "\n"
+            elif selected_model == "Stemmer":
+                result += doc.stem_conll + "\n"
+            elif selected_model == "NER":
+                result += doc.ner + "\n"
+            elif selected_model == "SemanticParser":   
+                os.makedirs(file.name.strip(".txt"), exist_ok=True)
+                file_write = open(os.path.join(file.name.strip(".txt"),str(count)+".xml"),"w") 
+                file_write.write(doc.ucca_conll)
+                count += 1
+        file_write.write(result)            
+        #st.sidebar.download_button(label="Analyse", data=result, file_name=file.name.strip(".txt") + "_" + selected_model+ '_processed.txt')
+
 
 def visualize_parser(
     doc,

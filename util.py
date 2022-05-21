@@ -74,10 +74,7 @@ def process_text(model_name: str, model_info: Dict, text: str):
         doc.morph_tag = joint_runtime.predict_morpheme_tags_file(model, text)["doc"]
         doc.pos = joint_runtime.predict_pos_file(model, text)["doc"]
         
-        doc.dep_conll = joint_runtime.predict_dependecy_file(model, text)["conllu"]
-        doc.morph_conll = joint_runtime.predict_morphemes_file(model, text)["morphemes"]
-        doc.morph_tag_conll = joint_runtime.predict_morpheme_tags_file(model, text)["conllu"]
-        doc.pos_conll = joint_runtime.predict_pos_file(model, text)["conllu"]
+        doc.joint_conll = joint_runtime.predict_joint(model, text)["conllu"]
     elif model_name == "JointModel-DependencyParsing":
         doc.dep = joint_runtime.predict_dependecy_file(model, text)["doc"]
         doc.dep_conll = joint_runtime.predict_dependecy_file(model, text)["conllu"]
@@ -91,14 +88,12 @@ def process_text(model_name: str, model_info: Dict, text: str):
         doc.pos = joint_runtime.predict_pos_file(model, text)["doc"]
         doc.pos_conll = joint_runtime.predict_pos_file(model, text)["conllu"]
     elif model_name == "Stemmer":
-        doc.stemmed = stemmer_runtime.predict_stems(model, text)
-        doc.stemmed_conll = stemmer_runtime.predict_stems(model, text)
+        doc.stemmed = stemmer_runtime.predict_stems(model, text)["doc"]
+        doc.stem_conll = stemmer_runtime.predict_stems(model, text)["conllu"]
     elif model_name == "NER":
         doc.ner = ner_runtime.predict_ner(model, text)
-        doc.ner_conll = ner_runtime.predict_ner(model, text)
     elif model_name == "SemanticParser":
-        doc.ucca = semantic_runtime.predict_semantic(model, text)[0]
-        doc.ucca_conll = semantic_runtime.predict_semantic(model, text)[1]
+        doc.ucca, doc.ucca_conll = semantic_runtime.predict_semantic(model, text)
     else:
         raise ValueError(f"Unknown model {type}")
     return doc

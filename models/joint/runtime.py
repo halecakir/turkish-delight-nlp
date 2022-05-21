@@ -17,6 +17,17 @@ def load_model(model_path, model_opt_path):
     parser.Load(model_path)
     return parser
 
+def predict_joint(model, sentence):
+    result = ""
+    doc = {}
+    _, morhps = model.predict_morphemes(sentence)
+    for entry, morph in zip(model.predict_sentence(sentence), morhps):
+        if entry.form == "*root*":
+            continue
+        entry.lemma = "-".join(morph)
+        doc[entry.form] = morph
+        result += str(entry) + "\n"
+    return {"conllu": result, "sentence": sentence, "morphemes": doc}
 
 def predict_dependecy_file(model, sentence):
     result = ""

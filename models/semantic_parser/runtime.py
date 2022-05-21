@@ -20,7 +20,9 @@ from ucca.ioutil import (
     get_passages,
     get_passages_with_progress_bar,
     external_write_mode,
+    write_passage,
 )
+from ucca.convert import passage2file
 import matplotlib.pyplot as plt
 import stanza
 save_path = "dataset"
@@ -38,7 +40,6 @@ def load_model(data_path):
     vocab_path = os.path.join(data_path, "vocab.pt")
     state_path = os.path.join(data_path, "parser.pt")
     config_path = os.path.join(data_path, "config.json")
-    print(data_path, config_path)
     ucca_parser = UCCA_Parser.load(vocab_path, config_path, state_path)
     	
     return ucca_parser

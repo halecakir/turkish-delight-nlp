@@ -1,5 +1,6 @@
 from pathlib import Path
-
+import os 
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 import srsly
 
 from visualizer import visualize
