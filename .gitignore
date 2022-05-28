@@ -1,7 +1,0 @@
-venv/
-*.code-workspace
-**/__pycache__/
-venvpy37/
-.mypy_cache/
-.vscode
-**/log.txt
