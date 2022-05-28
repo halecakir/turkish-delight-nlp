@@ -1,0 +1,70 @@
+version: "3.8"
+services:
+  base:
+    image: halecakir/nlp_base
+    build: ./base
+
+  backend:
+    image: halecakir/turkish_delight_nlp_backend
+    build: ./backend
+    command: uvicorn turkishdelightnlp.main:app --host 0.0.0.0 --port 8000  --reload --root-path /TurkishNLP/api
+    restart: always
+    depends_on:
+      - base
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/app
+    environment:
+      - API_KEY=WpJsSJ3fzI
+      - IS_DEBUG=False
+      - DEFAULT_MODELS=/app/config/models.json
+      - DATA_ROOT=/base/data
+      - STANZA_RESOURCES_DIR=/app/resources
+      - API_PREFIX=/v1
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=Host(`localhost`) && PathPrefix(`/TurkishNLP/api`)
+      - traefik.http.routers.backend.entrypoints=web
+      - traefik.http.routers.backend.middlewares=backend-stripprefix
+      - traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/TurkishNLP/api
+
+
+  streamlit:
+    image: halecakir/turkish_delight_nlp_demo
+    build: ./demo
+    command: streamlit run  app.py --server.port 8000
+    restart: always
+    depends_on:
+      - base
+    volumes:
+      - ./demo:/app
+    environment:
+      - DATA_ROOT=/base/data
+      - STANZA_RESOURCES_DIR=/app/resources_stanza
+      - PAPERS_MD=/app/papers.md
+      - CONTACT_MD=contact.md
+      - DEFAULT_MODELS=/app/models.json
+      - REST_URL=http://rgcl.wlv.ac.uk/TurkishNLP/api/docs
+    expose:
+      - 8000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.streamlit.rule=Host(`localhost`) && PathPrefix(`/TurkishNLP`)
+      - traefik.http.routers.streamlit.entrypoints=web
+      - traefik.http.routers.streamlit.middlewares=streamlit-stripprefix
+      - traefik.http.middlewares.streamlit-stripprefix.stripprefix.prefixes=/TurkishNLP
+
+  traefik:
+    image: halecakir/traefik:v2.2
+    command: --entryPoints.web.address=:80 
+             --providers.docker.exposedByDefault=false 
+             --api.insecure=true
+             --log.level=ERROR
+    ports:
+      - 8008:80
+      - 8081:8080
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
