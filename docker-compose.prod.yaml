@@ -7,6 +7,8 @@ services:
     image: halecakir/turkish_delight_nlp_backend
     command: uvicorn turkishdelightnlp.main:app --host 0.0.0.0 --port 8000  --reload --root-path /TurkishNLP/api
     restart: always
+    expose:
+      - 8000
     depends_on:
       - base
     environment:
@@ -30,6 +32,8 @@ services:
     restart: always
     depends_on:
       - base
+    expose:
+      - 8000
     environment:
       - DATA_ROOT=/base/data
       - STANZA_RESOURCES_DIR=/app/resources_stanza
