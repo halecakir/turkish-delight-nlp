@@ -9,8 +9,6 @@ services:
     restart: always
     depends_on:
       - base
-    expose:
-      - 8000
     environment:
       - API_KEY=WpJsSJ3fzI
       - IS_DEBUG=False
